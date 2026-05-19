@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# Environment files
+.env
+!.env.example
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+
+# Frontend (handled by frontend/.gitignore for local dev, also listed here for root-level tools)
+frontend/node_modules/
+frontend/dist/
