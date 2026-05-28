@@ -1,9 +1,16 @@
+import logging
+import os
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from .config import settings
+
+logging.basicConfig(
+    level=getattr(logging, os.getenv("LOG_LEVEL", "INFO").upper(), logging.INFO),
+    format="%(levelname)-8s %(name)s — %(message)s",
+)
 from .database import close_pool, open_pool
 from .routes import dashboard, health, measurements, sensors
 from .routes import weathercloud
