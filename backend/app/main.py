@@ -6,12 +6,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from .config import settings
 from .database import close_pool, open_pool
 from .routes import dashboard, health, measurements, sensors
+from .routes import weathercloud
+from .scheduler import weather_scheduler
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await open_pool()
+    weather_scheduler.start()
     yield
+    weather_scheduler.stop()
     await close_pool()
 
 
@@ -38,7 +42,22 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+@app.get("/")
+async def root():
+    return {
+        "status": "ok",
+        "message": "Sutron X100 Timescale API running",
+        "station_id": settings.default_station_id,
+        "incoming_timestamp_assumption": "sensor_timestamp is UTC",
+        "display_timezone": settings.display_timezone,
+        "storage_format": "label and unit are saved separately",
+        "scheduler_jobs": weather_scheduler.get_jobs(),
+    }
+
+
 app.include_router(health.router)
 app.include_router(measurements.router)
 app.include_router(sensors.router)
 app.include_router(dashboard.router)
+app.include_router(weathercloud.router)

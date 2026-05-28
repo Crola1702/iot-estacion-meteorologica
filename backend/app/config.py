@@ -27,6 +27,16 @@ class Settings:
             "BACKEND_CORS_ORIGINS",
             "http://localhost:5173,http://127.0.0.1:5173",
         )
+        self.weathercloud_enabled = os.getenv("WEATHERCLOUD_ENABLED", "false").lower() == "true"
+        self.weathercloud_id = os.getenv("WEATHERCLOUD_ID") or None
+        self.weathercloud_key = os.getenv("WEATHERCLOUD_KEY") or None
+        self.weathercloud_api_url = os.getenv(
+            "WEATHERCLOUD_API_URL",
+            "https://api.weathercloud.net/v01/set",
+        )
+        self.weathercloud_sync_interval_minutes = int(
+            os.getenv("WEATHERCLOUD_SYNC_INTERVAL_MINUTES", "5")
+        )
 
     @property
     def timezone(self) -> ZoneInfo:

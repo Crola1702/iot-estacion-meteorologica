@@ -2,3 +2,5 @@ fastapi
 uvicorn[standard]
 psycopg[binary,pool]
 python-dotenv
+apscheduler>=3.10,<4.0
+httpx>=0.27
